@@ -1,0 +1,2 @@
+pycryptodome>=3.20.0
+stego-lsb>=1.7.0
