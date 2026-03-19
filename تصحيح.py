@@ -1,4 +1,3 @@
-# save as debug.py and run it
 from dotenv import load_dotenv
 import os, hashlib
 
