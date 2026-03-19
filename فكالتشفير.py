@@ -1,20 +1,22 @@
-import subprocess, hashlib, wave
+import hashlib, wave
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import unpad
 from base64 import b64decode
+from dotenv import load_dotenv
+import os
 
-# --- Step 1: Reproduce the same key from this repo ---
+load_dotenv()
+
+# --- Step 1: Get key from .env ---
 def get_repo_key():
-    try:
-        commit = subprocess.check_output(
-            ["git", "rev-parse", "HEAD"],
-            stderr=subprocess.DEVNULL
-        ).strip()
-        return hashlib.sha256(commit).digest()
-    except Exception:
-        print("[!] ERROR: You must run this inside the cloned repository.")
-        print("    The key is bound to this repo's commit history.")
+    commit = os.getenv("COMMIT_HASH")
+    if not commit:
+        print("[!] ERROR: COMMIT_HASH not found.")
+        print("    1. Run:  git log --oneline")
+        print("    2. Copy the latest commit hash")
+        print("    3. Paste it in .env as COMMIT_HASH=<hash>")
         exit(1)
+    return hashlib.sha256(commit.strip().encode()).digest()
 
 # --- Step 2: Extract hidden bits from WAV ---
 def decode_audio(wav_file: str) -> str:

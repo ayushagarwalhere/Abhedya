@@ -3,9 +3,10 @@ from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
 from base64 import b64encode
 
-# --- Step 1: Generate key from Git commit ---
+# --- Step 1: Generate key from latest Git commit ---
 def get_repo_key():
     commit = subprocess.check_output(["git", "rev-parse", "HEAD"]).strip()
+    print(f"[~] Encoding with commit: {commit.decode()}")
     return hashlib.sha256(commit).digest()
 
 # --- Step 2: Encrypt the message ---
